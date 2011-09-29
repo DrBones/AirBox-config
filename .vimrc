@@ -18,8 +18,8 @@ Bundle 'gmarik/vundle'
 "Command T Esc Binding
 let g:CommandTCancelMap='<Esc>'
 let g:CommandTMaxHeight=10
-nmap <silent> <Leader>d :CommandT<CR>
-nmap <silent> <Leader>s :CommandTBuffer<CR>
+nmap <silent> <Leader>l :CommandT<CR>
+nmap <silent> <Leader>m :CommandTBuffer<CR>
 
 " original repos on github
 Bundle 'tpope/vim-fugitive'
@@ -33,6 +33,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'fs111/pydoc.vim'
 Bundle 'vim-scripts/tComment'
 Bundle 'scrooloose/nerdtree'
+Bundle 'altercation/vim-colors-solarized'
 "Bundle 'fholgado/minibufexpl.vim'
 " vim-scripts repos
 "Bundle 'pylint.vim'
@@ -45,6 +46,7 @@ Bundle 'pyflakes.vim'
 " Bundle 'PySmell'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex', {'rtp': 'vimfiles/'}
 
 filetype plugin indent on
 "set nocompatible
@@ -111,9 +113,15 @@ set encoding=utf-8
 
 " Keep indentation level from previous line: 
 set autoindent
-
+" Set title in titlebar
+set title 
+set titlestring=%t%(\ %M%)%=%{expand(\"%:~:h\")}\/%(\ %a%)
+set titlelen=40
 " Disable read-only protection
 " set modifiable
+" Set messages shorter to avoid 'Press ENTER to continue' message because the
+" line is too long
+set shortmess=a
 
 " Persistent undo
 set undodir=/tmp/
@@ -184,7 +192,8 @@ set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi
 
 " Set default filetype of tex documents to tex to ensure latex-suite is loaded
 let g:tex_flavor='latex'
-
+" Set default keymapping to fix press ENTER issue
+"add <cr> to vim-latex/vimfiles/compiler.vim Tex_Compile mapping
 " Spellchecking, toggle using F4*********************************************
 
 function! ToggleSpell()
@@ -202,8 +211,8 @@ let ropevim_extended_complete = 1
 let g:ropevim_autoimport_modules = ["os.*","traceback","django.*","lxml.etree","lxml.*","scipy"]
 " imap <c-space> <C-R>=RopeCodeAssistInsertMode()<CR>
 
-nmap <F4> :call ToggleSpell()<CR>
-imap <F4> <Esc>:call ToggleSpell()<CR>a
+nmap <silent> <F4> :call ToggleSpell()<CR>
+imap <silent> <F4> <Esc>:call ToggleSpell()<CR>a
 " Navigation use Ctrl - hjkl  key to switch split windows*****************
 nmap <silent> <C-k> :wincmd k<CR>
 nmap <silent> <C-j> :wincmd j<CR>
@@ -211,6 +220,7 @@ nmap <silent> <C-h> :wincmd h<CR>
 nmap <silent> <C-l> :wincmd l<CR>
 noremap <silent> <S-h> :bprevious<CR>
 noremap <silent> <S-l> :bnext<CR>
+noremap § ``
 :ca WQ wq
 :ca W w
 :ca X x
@@ -280,8 +290,9 @@ let python_highlight_all=1
 "let xterm16_brightness  = 'default'
 
 "colo xterm16
-
 "colorscheme ir_black
+colorscheme solarized
+set background=dark
 
 
 " Status Line *****************************************************************
@@ -453,9 +464,10 @@ let NERDTreeWinPos='right'
 " -----------------------------------------------------------------------------  
 
 " Mac *************************************************************************
-"if has("mac") 
-  "" 
-"endif
+if has("mac") 
+	let &t_SI = "\<Esc>]50;CursorShape=1\x7" 
+	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
  
 " Windows *********************************************************************
 "if has("gui_win32")

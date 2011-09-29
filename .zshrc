@@ -10,14 +10,17 @@ bindkey -v
 #bindkey -v '\e[7~' vi-beginning-of-line
 #bindkey -v '\e[F' vi-end-of-line
 #bindkey -v '\e[8~' vi-end-of-line
-bindkey  'b' vi-beginning-of-line    # for gnome terminal
+bindkey  '[1;9D' vi-beginning-of-line    # alt-leftarrow for iTerm2.app
+bindkey  '[H' vi-beginning-of-line    # fn-leftarrow for iTerm2.app
+bindkey  'b' vi-beginning-of-line    # for Terminal.app
 #bindkey -M vicmd '[1~' vi-beginning-of-line   # for gnome terminal
-bindkey  'f' vi-end-of-line          # for gnome terminal
+bindkey  '[1;9C' vi-end-of-line          # alt-rightarrow for iTerm2
+bindkey  '[F' vi-end-of-line          # fn-rightarrow for iTerm2
+bindkey  'f' vi-end-of-line          # for Terminal.app
 #bindkey -M vicmd '[4~' vi-end-of-line         # for gnome terminal
-bindkey -M vicmd '^?' backward-delete-char
+bindkey '^?' backward-delete-char
 bindkey '^[[3~' delete-char # Del
-bindkey -M viins '^R' history-incremental-search-backward
-bindkey -M vicmd '^R' history-incremental-search-backward
+bindkey '^R' history-incremental-search-backward
 #bindkey -M vicmd 'K' history-incremental-search-backward
 bindkey -M viins '[A' up-line-or-history
 bindkey -M viins '[B' down-line-or-history
@@ -27,7 +30,7 @@ bindkey -v '^Z' undo
 
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/jonas/.zshrc'
+zstyle :compinstall filename '~/.zshrc'
 MSG=/var/log/messages.log
 #------------------------
 # Autoloading Modules
@@ -80,13 +83,14 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 #export TERM='xterm-256color'
 #export ECLIM_ECLIPSE_HOME=/usr/share/eclipse
 #export PATH=$PATH:~/bin:/opt/java/bin:~/local/bin
-export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
+export PYTHONPATH=/usr/local/lib/wxPython/lib/python2.7/site-packages/wx-2.9.2-osx_cocoa:/usr/local/lib/wxPython/lib/python2.7/site-packages:/usr/local/lib/python:$PYTHONPATH
 
 #-----------------------------#
 # MacPort and Fink env variables
 #-----------------------------#
 #export PATH=$PATH:~/bin:/opt/local/bin:/opt/local/sbin
 export PATH=~/bin:/usr/local/bin:/usr/local/share/python:$PATH:/opt/local/bin:/opt/local/sbin
+export EDITOR="/usr/local/bin/mvim -v"
 #source /sw/bin/init.sh
 #-----------------------------#
 # change http_proxy depending on Network Location
@@ -104,15 +108,17 @@ alias rcp='rsync --progress -h'
 alias publicip="curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
 #alias mkvplayer="mplayer -lavdopts lowres=1:fast:skiploopfilter=all -vf scale=720:-2"
 alias vim="mvim -v"
-#alias sim="sudo vim"
+alias sim="sudo vim"
 alias cp="cp -i"
 alias rm="rm -r"
-alias ipython="ipython -no-banner"
+alias ipython="ipython -i -no-banner"
+alias qtpython="ipython-qtconsole --pylab=inline --ConsoleWidget.font_family="Inconsolata" --ConsoleWidget.font_size=13"
 alias gits="git status"
+alias gitu="git add -u"
+alias gitc="git commit"
 alias sudo='sudo '
 # Set up auto extension stuff
 #BROWSER=firefox
-#EDITOR=vim
 #alias -s html=$BROWSER
 #alias -s org=$BROWSER
 #alias -s php=$BROWSER
@@ -173,11 +179,11 @@ chpwd
 # From http://zshwiki.org/home/examples/zlewidgets
 function zle-line-init zle-keymap-select {
   if [[ ${KEYMAP} = vicmd ]] ; then
-    VICOLOR1="$(print '%{\e[38;5;56m%}')"
-    VICOLOR2="$(print '%{\e[38;5;99m%}')"
+    VIPROMPT="<->" 
+    print -Pn "\033]50;CursorShape=0\x7"
   else
-    VICOLOR1="%{$fg_bold[green]%}"
-    VICOLOR2="%{$fg_no_bold[green]%}"
+    VIPROMPT="-->"
+    print -Pn "\033]50;CursorShape=1\x7"
   fi
 
     #VIMODE="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/}"
@@ -196,7 +202,7 @@ zle -N zle-keymap-select
 
 
 #-----------------------------
-# Prompt
+# Prompt 0
 #-----------------------------
 #RPROMPT="$(print '${VIMODE}%{\e[38;5;32m%}%~%{\e[0m%}')"
 #PROMPT="$(print '%{\e[38;5;32m%}%n%{\e[0m%}@%{\e[38;5;46m%}%m%{\e[0m%}%# ')"
@@ -224,28 +230,23 @@ setprompt () {
 #${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<\
 #${PR_BOLD_WHITE} ${USRPROMPT}${PR_RED}!${PR_BOLD_WHITE}%h${PR_BOLD_RED}\
 #%(?.. E:%?)${PR_BOLD_BLUE}${PR_SCREEN}${PR_JOBS}\
-#${PR_BOLD_WHITE}${VIMODE}\
+#${PR_BOLD_WHITE}${VIMODE}\""
 #
 #${PR_BOLD_BLACK}>${PR_GREEN}>${PR_BOLD_GREEN}>\
 #%{${reset_color}%} '
-    PROMPT='${PR_BOLD_BLACK}>${VICOLOR2}>${VICOLOR1}>\
-%{${reset_color}%} '
+    PROMPT="$(print '${VIPROMPT} ')"
     RPROMPT="$(print '%{\e[38;5;32m%}${GITTED}%~%{\e[0m%}')"
     # Of course we need a matching continuation prompt
     PROMPT2='\
-${PR_BOLD_BLACK}>${PR_GREEN}>${PR_BOLD_GREEN}>\
-${PR_BOLD_WHITE} %_ ${PR_BOLD_BLACK}>${PR_GREEN}>\
-${PR_BOLD_GREEN}>%{${reset_color}%} '
+${PR_BOLD_BLACK} ->%{${reset_color}%} '
 }
 
 setprompt
 
-
 precmd () { 
 
-# Set Colors of Lower Arrow in Prompt
-    VICOLOR1="%{$fg_bold[green]%}"
-    VICOLOR2="%{$fg_no_bold[green]%}"
+    VIPROMPT="-->"
+    CURSORSHAPE="\033]50;CursorShape=0\x7"
 # set a simple variable to show when in screen
     if [[ -n "${WINDOW}" ]]; then
         PR_SCREEN=" S:${WINDOW}"
