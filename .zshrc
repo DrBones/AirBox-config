@@ -269,3 +269,16 @@ precmd () {
    print -rP '${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<\
 ${PR_BOLD_WHITE} ${USRPROMPT}${PR_RED}! ${PR_BOLD_BLACK}%*${PR_BOLD_RED}\
 %(?.. E:%?)${PR_BOLD_BLUE}${PR_SCREEN}${PR_JOBS}${PR_BOLD_WHITE}'}
+
+# pip zsh completion start
+function _pip_completion {
+  local words cword
+  read -Ac words
+  read -cn cword
+  reply=( $( COMP_WORDS="$words[*]" \
+             COMP_CWORD=$(( cword-1 )) \
+             PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
+# pip zsh completion end
+

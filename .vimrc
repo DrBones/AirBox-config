@@ -19,7 +19,7 @@ Bundle 'gmarik/vundle'
 let g:CommandTCancelMap='<Esc>'
 let g:CommandTMaxHeight=10
 nmap <silent> <Leader>l :CommandT<CR>
-nmap <silent> <Leader>m :CommandTBuffer<CR>
+nmap <silent> <Leader>p :CommandTBuffer<CR>
 
 " original repos on github
 Bundle 'tpope/vim-fugitive'
@@ -28,18 +28,18 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'sontek/rope-vim'
 Bundle 'ervandew/supertab'
-Bundle 'rygwdn/rope-omni'
+" Bundle 'rygwdn/rope-omni'
 Bundle 'tpope/vim-surround'
 Bundle 'fs111/pydoc.vim'
 Bundle 'vim-scripts/tComment'
 Bundle 'scrooloose/nerdtree'
 Bundle 'altercation/vim-colors-solarized'
-"Bundle 'fholgado/minibufexpl.vim'
+" Bundle 'fholgado/minibufexpl.vim'
 " vim-scripts repos
 "Bundle 'pylint.vim'
 Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'buftabs'
+" Bundle 'FuzzyFinder'
+" Bundle 'buftabs'
 Bundle 'rails.vim'
 Bundle 'taglist.vim'
 Bundle 'pyflakes.vim'
@@ -107,6 +107,8 @@ au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 " Set the default file encoding to UTF-8: 
 set encoding=utf-8
 
+" removes statusbar
+" set laststatus=0
 " Puts a marker at the beginning of the file to differentiate between UTF and
 " UCS encoding (WARNING: can trick shells into thinking a text file is actually
 " a binary file when executing the text file): ``set bomb``
@@ -206,7 +208,7 @@ function! ToggleSpell()
     endif
 endfunction
 " Rope AutoComplete
-let ropevim_vim_completion = 1
+" let ropevim_vim_completion = 1
 let ropevim_extended_complete = 1
 let g:ropevim_autoimport_modules = ["os.*","traceback","django.*","lxml.etree","lxml.*","scipy"]
 " imap <c-space> <C-R>=RopeCodeAssistInsertMode()<CR>
@@ -236,14 +238,14 @@ set si " smartindent	(local to buffer)
 
 " Python Stuff ****************************************************************
 
-"python << EOF
-"import os
-"import sys
-"import vim
-"for p in sys.path:
-"    if os.path.isdir(p):
-"        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-"EOF
+python << EOF
+import os
+import sys
+import vim
+for p in sys.path:
+   if os.path.isdir(p):
+       vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+EOF
 
 "map <C-h> :py EvaluateCurrentRange()
 
@@ -297,7 +299,6 @@ set background=dark
 
 " Status Line *****************************************************************
 "set showcmd
-"set ruler " Show ruler
 "set ch=2 " Make command line two lines high
 if has("statusline")
  set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
@@ -372,7 +373,7 @@ let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 
 " Omni Completion *************************************************************
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType python setlocal omnifunc=RopeCompleteFunc
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
