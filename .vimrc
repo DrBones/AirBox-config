@@ -14,25 +14,18 @@ call vundle#rc()
 " let Vundle manage Vundle
 " required! 
 Bundle 'gmarik/vundle'
-
-"Command T Esc Binding
-let g:CommandTCancelMap='<Esc>'
-let g:CommandTMaxHeight=10
-nmap <silent> <Leader>l :CommandT<CR>
-nmap <silent> <Leader>p :CommandTBuffer<CR>
-
 " original repos on github
 Bundle 'tpope/vim-fugitive'
-Bundle 'msanders/snipmate.vim'
-Bundle 'Lokaltog/vim-easymotion'
+" Bundle 'msanders/snipmate.vim'
+" Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'sontek/rope-vim'
-Bundle 'ervandew/supertab'
-" Bundle 'rygwdn/rope-omni'
-Bundle 'tpope/vim-surround'
-Bundle 'fs111/pydoc.vim'
+" Bundle 'sontek/rope-vim'
+Bundle 'rygwdn/rope-omni'
+" Bundle 'tpope/vim-surround'
+" Bundle 'fs111/pydoc.vim'
 Bundle 'vim-scripts/tComment'
 Bundle 'scrooloose/nerdtree'
+Bundle 'ervandew/supertab'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'fholgado/minibufexpl.vim'
 " vim-scripts repos
@@ -46,16 +39,25 @@ Bundle 'pyflakes.vim'
 " Bundle 'PySmell'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
-Bundle 'git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex', {'rtp': 'vimfiles/'}
+" Bundle 'git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex', {'rtp': 'vimfiles/'}
 
 filetype plugin indent on
-"set nocompatible
 
-autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
+"Command T Esc Binding
+let g:CommandTCancelMap='<Esc>'
+let g:CommandTMaxHeight=10
+nmap <silent> <Leader>l :CommandT<CR>
+nmap <silent> <Leader>p :CommandTBuffer<CR>
 
+set shiftwidth=2
+"Restores the last cursor position
+" VimTip 80: Restore cursor to file position in previous editing session
+" for unix/linux/solaris
+set nosol
+set viminfo='10,\"100,:20,%,n~/.viminfo
+
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+"
 " Number of spaces to use for an indent.
 " This will affect Ctrl-T and 'autoindent'.
 " Python: 4 spaces
@@ -92,23 +94,23 @@ au BufRead,BufNewFile Makefile* set noexpandtab
 " - r : do not insert the comment leader when hitting <Enter> in insert mode
 " Python: not needed
 " C: prevents insertion of '*' at the beginning of every line in a comment
-au BufRead,BufNewFile *.c,*.h set formatoptions-=c formatoptions-=o formatoptions-=r
+" au BufRead,BufNewFile *.c,*.h set formatoptions-=c formatoptions-=o formatoptions-=r
 
 " Use UNIX (\n) line endings.
 " Only used for new files so as to not force existing files to change their
 " line endings.
 " Python: yes
 " C: yes
-au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+" au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 
 " The following section contains suggested settings.  While in no way required
 " to meet coding standards, they are helpful.
 
 " Set the default file encoding to UTF-8: 
-set encoding=utf-8
+" set encoding=utf-8
 
 " removes statusbar
-" set laststatus=0
+set laststatus=2
 " Puts a marker at the beginning of the file to differentiate between UTF and
 " UCS encoding (WARNING: can trick shells into thinking a text file is actually
 " a binary file when executing the text file): ``set bomb``
@@ -121,6 +123,7 @@ set titlestring=%t%(\ %M%)%=%{expand(\"%:~:h\")}\/%(\ %a%)
 set titlelen=40
 " Disable read-only protection
 " set modifiable
+
 " Set messages shorter to avoid 'Press ENTER to continue' message because the
 " line is too long
 set shortmess=a
@@ -181,10 +184,9 @@ set hidden
 set winminheight=1
 
 " Wrap on these
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set whichwrap+=<,>,[,]
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set whichwrap+=<,>,[,]
 
-" If possible, try to use a narrow number column.
-setlocal numberwidth=4
+" Use '-' for folds
 set fillchars=fold:-
 
 " Use the cool tab complete menu
@@ -192,10 +194,18 @@ set fillchars=fold:-
 set wildmenu
 set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi,*.toc,*.bbl,*.blg
 
+" -------------------------------------------------------------------------------
+"  LaTeX files related
+" -------------------------------------------------------------------------------
 " Set default filetype of tex documents to tex to ensure latex-suite is loaded
 let g:tex_flavor='latex'
+autocmd FileType tex set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi,*.toc,*.bbl,*.blg,*.log,*.brf,*.out,*.fdb_latexmk
+autocmd FileType tex set shiftwidth=2
+autocmd FileType tex set iskeyword+=\.,\:
 " Set default keymapping to fix press ENTER issue
 "add <cr> to vim-latex/vimfiles/compiler.vim Tex_Compile mapping
+" -------------------------------------------------------------------------------
+
 " Spellchecking, toggle using F4*********************************************
 
 function! ToggleSpell()
@@ -208,9 +218,9 @@ function! ToggleSpell()
     endif
 endfunction
 " Rope AutoComplete
-" let ropevim_vim_completion = 1
-let ropevim_extended_complete = 1
-let g:ropevim_autoimport_modules = ["os.*","traceback","django.*","lxml.etree","lxml.*","scipy"]
+let ropevim_vim_completion=1
+" let ropevim_extended_complete=1
+" let g:ropevim_autoimport_modules=["os.*","traceback","django.*","lxml.etree","lxml.*","scipy"]
 " imap <c-space> <C-R>=RopeCodeAssistInsertMode()<CR>
 
 nmap <silent> <F4> :call ToggleSpell()<CR>
@@ -230,10 +240,11 @@ noremap § ``
 "Press space to alternate between Unfold and Fold
 nnoremap <Space> za
 map <leader>c <c-_><c-_>
-map <esc><Space> gcc
-inoremap <Nul> <C-x><C-o>
+map <leader>\ :e#<CR>
+" map <esc><Space> gcc
+" inoremap <Nul> <C-x><C-o>
 " Indenting *******************************************************************
-set ai " Automatically set the indent of a new line (local to buffer)
+" set ai " Automatically set the indent of a new line (local to buffer)
 set si " smartindent	(local to buffer)
 
 " Python Stuff ****************************************************************
@@ -243,8 +254,8 @@ import os
 import sys
 import vim
 for p in sys.path:
-   if os.path.isdir(p):
-       vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+    if os.path.isdir(p):
+        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 
 "map <C-h> :py EvaluateCurrentRange()
@@ -365,15 +376,15 @@ map E ge
 "---------------------------------------------------------------------
 
 "by tags
-set dictionary=/usr/share/dict/words
-let g:showfuncctagsbin = "/usr/bin/ctags"
+" set dictionary=/usr/share/dict/words
+" let g:showfuncctagsbin="/usr/bin/ctags"
 
 " by pydict
-let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict' 
+" let g:pydiction_location='~/.vim/bundle/Pydiction/complete-dict' 
 
 " Omni Completion *************************************************************
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType python setlocal omnifunc=RopeCompleteFunc
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
@@ -382,26 +393,26 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 " If you prefer the Omni-Completion tip window to close when a selection is
 " made, these lines close it on movement in insert mode or when leaving
 " insert mode
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if pumvisible()==0|pclose|endif
+autocmd InsertLeave * if pumvisible()==0|pclose|endif
 
 " May require ruby compiled in
 
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete 
 
 "Supertab default completion
-let g:SuperTabDefaultCompletionType = "context"
-set completeopt=menuone,longest,preview
-let g:SuperTabLongestEnhanced = 1
+let g:SuperTabDefaultCompletionType="context"
+set completeopt=menuone,longest
+let g:SuperTabLongestEnhanced=1
 
 " --------- Ctags
 nnoremap <silent> <F9> :TlistToggle<CR>
 " show list on the rightmost side of the window
-let Tlist_Use_Right_Window = 1
+let Tlist_Use_Right_Window=1
 " remove empty lines
-let Tlist_Compact_Format = 1
+let Tlist_Compact_Format=1
 " show Tlist menu in gVim
-let Tlist_Show_Menu = 1 
+let Tlist_Show_Menu=1 
 
 """ --------- Pylint
 "autocmd FileType python compiler pylint
@@ -417,7 +428,7 @@ let Tlist_Show_Menu = 1
 " -----------------------------------------------------------------------------  
 
 "" NERDTree ********************************************************************
-noremap <silent> <F7> :NERDTreeToggle<CR>
+" noremap <silent> <F7> :NERDTreeToggle<CR>
 noremap <silent> <leader>n :NERDTreeToggle<CR>
 "" User instead of Netrw when doing an edit /foobar
 let NERDTreeHijackNetrw=1
@@ -466,8 +477,8 @@ let NERDTreeWinPos='right'
 
 " Mac *************************************************************************
 if has("mac") 
-	let &t_SI = "\<Esc>]50;CursorShape=1\x7" 
-	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+	let &t_SI="\<Esc>]50;CursorShape=1\x7" 
+	let &t_EI="\<Esc>]50;CursorShape=0\x7"
 endif
  
 " Windows *********************************************************************
