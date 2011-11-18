@@ -21,7 +21,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Bundle 'sontek/rope-vim'
 Bundle 'rygwdn/rope-omni'
-" Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-surround'
 " Bundle 'fs111/pydoc.vim'
 Bundle 'vim-scripts/tComment'
 Bundle 'scrooloose/nerdtree'
@@ -201,7 +201,8 @@ set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi
 let g:tex_flavor='latex'
 autocmd FileType tex set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi,*.toc,*.bbl,*.blg,*.log,*.brf,*.out,*.fdb_latexmk
 autocmd FileType tex set shiftwidth=2
-autocmd FileType tex set iskeyword+=\.,\:
+" autocmd FileType tex set iskeyword+=.,:
+au BufRead,BufNewFile *.tex set iskeyword+=:,.
 " Set default keymapping to fix press ENTER issue
 "add <cr> to vim-latex/vimfiles/compiler.vim Tex_Compile mapping
 " -------------------------------------------------------------------------------
@@ -245,7 +246,7 @@ map <leader>\ :e#<CR>
 " inoremap <Nul> <C-x><C-o>
 " Indenting *******************************************************************
 " set ai " Automatically set the indent of a new line (local to buffer)
-set si " smartindent	(local to buffer)
+" set si " smartindent	(local to buffer)
 
 " Python Stuff ****************************************************************
 
@@ -337,6 +338,13 @@ set linebreak  " Wrap at word
 
 nnoremap <Enter> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 "set fo-=r " do not insert a comment leader after an enter, (no work, fix!!)
+
+"Press Ctrl-a in insert or visual mode to toggle paste mode (good for indented
+"code)
+set pastetoggle=<C-a>
+"Make the timeout between command key presses shorter (default 1000millisec)
+"so <Shift-O> opens a newline above cursor more quickly
+set timeoutlen=300
 
 " Sessions ********************************************************************
 " Sets what is saved when you save a session
