@@ -32,7 +32,7 @@ Bundle 'altercation/vim-colors-solarized'
 "Bundle 'pylint.vim'
 Bundle 'L9'
 " Bundle 'FuzzyFinder'
-" Bundle 'buftabs'
+" Bundle 'buftabs
 Bundle 'rails.vim'
 Bundle 'taglist.vim'
 Bundle 'pyflakes.vim'
@@ -201,6 +201,7 @@ set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi
 let g:tex_flavor='latex'
 autocmd FileType tex set wildignore+=*.o,*.obj,.git,*.vtr,*.vtu,*.vtk,*.bmp,*.aux,*.pdf,*.ps,*~,*.dvi,*.toc,*.bbl,*.blg,*.log,*.brf,*.out,*.fdb_latexmk
 autocmd FileType tex set shiftwidth=2
+
 " autocmd FileType tex set iskeyword+=.,:
 au BufRead,BufNewFile *.tex set iskeyword+=:,.
 " Set default keymapping to fix press ENTER issue
