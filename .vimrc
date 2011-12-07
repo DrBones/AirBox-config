@@ -276,7 +276,12 @@ set splitbelow splitright
 "set cursorline
 "set cursorcolumn
 
-
+"HIghlighting of trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+au ColorScheme * highlight ExtraWhitespace guibg=red
+au BufEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhiteSpace /\s\+$/
 " Searching *******************************************************************
 set hlsearch  " highlight search
 set incsearch  " incremental search, search as you type
