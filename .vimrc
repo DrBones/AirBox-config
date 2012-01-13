@@ -324,6 +324,9 @@ endif
 
 "Always display Cursor position in lower right
 set ruler
+"Display as much of a long line as fits into the window (instead of replacing
+"it by @)
+set display+=lastline
 
 " Line Wrapping ***************************************************************
 set nowrap
